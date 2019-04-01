@@ -9,7 +9,6 @@ const server = http.createServer(app);
 server.listen(port);
 
 function normalizePort(val) {
-  console.log(`normalizePort called`)
   const port = parseInt(val, 10);
   if (isNaN(port)) {
     return val;
