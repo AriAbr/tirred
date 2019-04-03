@@ -1,3 +1,33 @@
+var configCopy =
+{
+  "development": {
+    "username": "postgres",
+    "password": null,
+    "database": "bloccit-dev",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "logging": false,
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "postgres",
+    "password": null,
+    "database": "bloccit-test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "logging": false,
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
+
+
 'use strict';
 
 var fs        = require('fs');
@@ -5,7 +35,7 @@ var path      = require('path');
 var Sequelize = require('sequelize');
 var basename  = path.basename(__filename);
 var env       = process.env.NODE_ENV || 'development';
-var config    = require(__dirname + '/..\config\config.json')[env];
+var config    = configCopy["test"];
 var db        = {};
 
 if (config.use_env_variable) {
