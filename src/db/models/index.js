@@ -8,7 +8,8 @@ var env       = process.env.NODE_ENV || 'development';
 if (env[env.length-1] === " "){
   env = env.slice(0,-1);
 }
-var config    = require(__dirname + '\\..\\config\\config.json')[env];
+// var config    = require(__dirname + '\\..\\config\\config.json')[env];
+var config    = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
 var db        = {};
 
 
