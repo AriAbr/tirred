@@ -7,22 +7,22 @@
     <main class="container">
       <% include ../static/partials/navbar.ejs %>
 
-      <h1>Topics</h1>
+      <h1>Advertisements</h1>
 
-      <a href="/topics/new" class="btn btn-primary">New Topic</a>
-
+      <a href="/advertisements/new" class="btn btn-primary">New Advertisement</a>
 
       <ul class="list-group">
-
-        <% topics.forEach((topic) => { %>
-
+<!-- #1 -->
+        <% advertisements.forEach((advertisement) => { %>
+<!-- #2 -->
           <li class="list-group-item">
-            <a href="/topics/<%= topic.id %>"> <%= topic.title %> </a>
+            <a href="/advertisements/<%= advertisement.id %>"> <%= advertisement.title %> </a>
           </li>
         <% }) %>
       </ul>
 
     </main>
+
     <% include ../static/partials/baseScripts.ejs %>
 
   </body>
