@@ -8,6 +8,11 @@ module.exports = (sequelize, DataTypes) => {
     color: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+
+    topicId: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   }, {});
   Flair.associate = function(models) {

@@ -66,4 +66,33 @@ describe("Flair", () => {
       })
     });
   });
+
+  describe("#setTopic", () => {
+    it("should associate a topic and a flair together", (done) => {
+      Topic.create({
+        title: "Challenges of interstellar travel",
+        description: "1. The Wi-Fi is terrible"
+      })
+      .then((newTopic) => {
+        expect(this.flair.topicId).toBe(this.topic.id);
+
+        this.flair.setTopic(newTopic)
+        .then((flair) => {
+          expect(flair.topicId).toBe(newTopic.id);
+          done();
+        });
+      });
+    });
+  });
+
+  describe("#getTopic", () => {
+
+    it("should return the associated topic", (done) => {
+      this.flair.getTopic()
+      .then((associatedTopic) => {
+        expect(associatedTopic.title).toBe("Famous wells");
+        done();
+      });
+    });
+  });
 });
