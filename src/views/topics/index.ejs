@@ -12,8 +12,9 @@
 
       <h1>Topics</h1>
 
-      <a href="/topics/new" class="btn btn-primary">New Topic</a>
-
+      <% if(currentUser && currentUser.isAdmin()) {%>
+        <a href="/topics/new" class="btn btn-primary">New Topic</a>
+      <% } %>
 
       <ul class="list-group">
 

@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     Topic.hasMany(models.Banner, {
       foreignKey: "topicId",
       as: "banners",
+      //onDelete: "CASCADE" -- remove from banner, rule models - both in both files
     });
     Topic.hasMany(models.Rule, {
       foreignKey: "topicId",
