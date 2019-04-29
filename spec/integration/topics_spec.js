@@ -1,6 +1,7 @@
 const request = require("request");
 const server = require("../../src/server");
 const base = ("http://localhost:3000/topics/");
+
 const sequelize = require("../../src/db/models/index").sequelize;
 const Topic = require("../../src/db/models").Topic;
 const User = require("../../src/db/models").User;
@@ -49,16 +50,6 @@ describe("routes : topics", () => {
         );
       });
     });
-////beforeEach according to gist
-    // beforeEach((done) => {
-    //   request.get({
-    //     url: "http:/localhost:3000/auth/fake",
-    //     form: {
-    //       role: "admin"
-    //     }
-    //   });
-    //   done();
-    // })
 
 
     describe("GET /topics", () => {
