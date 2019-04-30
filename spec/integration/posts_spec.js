@@ -55,7 +55,7 @@ describe("routes : posts", () => {
       })
       .then((user) => {
         request.get({
-          url: "http://local:300/auth/fake",
+          url: "http://localhost:3000/auth/fake",
           form: {
             role: user.role,
             userId: user.id,
@@ -93,7 +93,6 @@ describe("routes : posts", () => {
         };
         request.post(options,
           (err, res, body) => {
-
             Post.findOne({where: {title: "Watching snow melt"}})
             .then((post) => {
               expect(post).not.toBeNull();
@@ -212,20 +211,29 @@ describe("routes : posts", () => {
     });
   });
 
-  describe("admin user performing CRUD actions for Post", () => {
+  describe("member user performing CRUD actions for Post", () => {
 
     beforeEach((done) => {
-      request.get({
-        url: "http://localhost:3000/auth/fake",
-        form: {
-          role: "member"
-        }
-      },
-        (err, res, body) => {
-          done();
-        }
-      );
-    });
+      User.create({
+        email: "member@example.com",
+        password: "123456",
+        role: "member"
+      })
+      .then((user) => {
+        request.get({
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            role: user.role,
+            userId: user.id,
+            email: user.email
+          }
+        },
+          (err, res, body) => {
+            done();
+          }
+        );
+      })
+    })
 
     describe("GET /topics/:topicID/posts/new", () => {
 
@@ -302,7 +310,7 @@ describe("routes : posts", () => {
 
     describe("POST /topics/:topicId/posts/:id/destroy", () => {
 
-      it("should delete the post with the associated ID", (done) => {
+      it("should not delete the post with the associated ID", (done) => {
         expect(this.post.id).toBe(1);
 
         request.post(`${base}/${this.topic.id}/posts/${this.post.id}/destroy`, (err, res, body) => {
@@ -310,7 +318,7 @@ describe("routes : posts", () => {
           Post.findById(1)
           .then((post) => {
             expect(err).toBeNull();
-            expect(post).toBeNull();
+            expect(post).not.toBeNull();
             done();
           })
         });
