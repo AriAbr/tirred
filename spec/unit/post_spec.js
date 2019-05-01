@@ -2,6 +2,7 @@ const sequelize = require("../../src/db/models/index").sequelize;
 const Topic = require("../../src/db/models").Topic;
 const Post = require("../../src/db/models").Post;
 const User = require("../../src/db/models").User;
+const Vote = require("../../src/db/models").Vote;
 
 describe("Post", () => {
 
@@ -107,7 +108,7 @@ describe("Post", () => {
     });
   });
 
-  describe("#setUser", () => {
+  describe("#setUser()", () => {
 
     it("should associate a post and a user together", (done) => {
 
@@ -128,13 +129,24 @@ describe("Post", () => {
     });
   });
 
-  describe("#getUser", () => {
+  describe("#getUser()", () => {
     it("should return the associated user", (done) => {
 
       this.post.getUser()
       .then((associatedUser) => {
         expect(associatedUser.email).toBe("starman@tesla.com");
         done();
+      });
+    });
+  });
+
+  describe("#getPoints()", () => {
+
+    it("should return the total votes for a post", (done) => {
+      this.post.getPoints()
+      .then((totalPoints) => {
+        expect(totalPoints).toBe(0);
+        done()
       });
     });
   });

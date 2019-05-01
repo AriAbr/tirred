@@ -139,11 +139,47 @@ describe("routes : votes", () => {
           }
         );
       });
+
+      it("should not create more than one vote per user for a given post", (done) => {
+        const options = {
+          url: `${base}${this.topic.id}/posts/${this.post.id}/votes/upvote`
+        };
+        request.get(options,
+          (err, res, body) => {
+            Vote.findOne({
+              where: {
+                userId: this.user.id,
+                postId: this.post.id
+              }
+            })
+            .then((vote) => {
+              request.get(options,
+                (err, res, body) => {
+                  Vote.findAll({
+                    where: {
+                      userId: this.user.id,
+                      postId: this.post.id
+                    }
+                  })
+                  .then((votes) => {
+                    expect(votes.length).toBe(1);
+                    done();
+                  })
+                }
+              )
+            })
+            .catch((err) => {
+              console.log(err);
+              done();
+            })
+          }
+        )
+      })
     });
 
     describe("GET /topics/:topicId/posts/:postId/votes/downvote", () => {
 
-      it("should create a down", (done) => {
+      it("should create a downvote", (done) => {
 
         const options = {
           url: `${base}${this.topic.id}/posts/${this.post.id}/votes/downvote`
