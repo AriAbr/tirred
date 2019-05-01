@@ -205,8 +205,89 @@ describe("routes : comments", () => {
 
       });
 
+      it("should not delete another member user's comment", (done) => {
+        Comment.all()
+        .then((comments) => {
+          const commentCountBeforeDelete = comments.length;
+
+          expect(commentCountBeforeDelete).toBe(1);
+
+          //create new user, assign this.comment to new user
+          User.create({
+            email: "bob@example.com",
+            password: "password"
+          })
+          .then((newUser) => {
+            this.comment.setUser(newUser);
+
+            //attempt delete
+            request.post(
+            `${base}${this.topic.id}/posts/${this.post.id}/comments/${this.comment.id}/destroy`,
+              (err, res, body) => {
+              expect(res.statusCode).toBe(401);
+              Comment.all()
+              .then((comments) => {
+                expect(err).toBeNull();
+                expect(comments.length).toBe(commentCountBeforeDelete);
+                done();
+              })
+            });
+          });
+        });
+      });
+
     });
 
+  });
+
+  describe("admin user performing CRUD actions for Comment", () => {
+    beforeEach((done) => {
+      request.get({
+        url: "http://localhost:3000/auth/fake",
+        form: {
+          role: "admin",
+          userId: this.user.id
+        }
+      },
+        (err, res, body) => {
+          done();
+        }
+      );
+    });
+
+    describe("POST /topics/:topicId/posts/:postId/comment/:id/destroy", () => {
+
+      it("should delete a member user's comment", (done) => {
+        Comment.all()
+        .then((comments) => {
+          const commentCountBeforeDelete = comments.length;
+
+          expect(commentCountBeforeDelete).toBe(1);
+
+          //create new user, assign this.comment to new user
+          User.create({
+            email: "bob@example.com",
+            password: "password"
+          })
+          .then((newUser) => {
+            this.comment.setUser(newUser);
+
+            //attempt delete
+            request.post(
+            `${base}${this.topic.id}/posts/${this.post.id}/comments/${this.comment.id}/destroy`,
+              (err, res, body) => {
+              expect(res.statusCode).toBe(302);
+              Comment.all()
+              .then((comments) => {
+                expect(err).toBeNull();
+                expect(comments.length).toBe(commentCountBeforeDelete - 1);
+                done();
+              })
+            });
+          });
+        });
+      });
+    });
   });
 
 });
