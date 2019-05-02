@@ -26,13 +26,13 @@ describe("Post", () => {
           posts: [{
             title: "My first visit to Proxima Centauri b",
             body: "I saw some rocks.",
-            userId: this.user.id
+            userId: this.user.id,
           }]
         }, {
           include: {
             model: Post,
             as: "posts"
-          }
+          },
         })
         .then((topic) => {
           this.topic = topic; //store the topic
@@ -142,12 +142,62 @@ describe("Post", () => {
 
   describe("#getPoints()", () => {
 
-    it("should return the total votes for a post", (done) => {
-      this.post.getPoints()
-      .then((totalPoints) => {
-        expect(totalPoints).toBe(0);
-        done()
+    it("should return the total votes for a post if none are there", (done) => {
+      let totalPoints = this.post.getPoints();
+      expect(totalPoints).toBe(0);
+      done();
+    });
+  });
+
+  describe("#hasUpvotedFor()", () => {
+
+    it("should return true if the user has an upvote for the post", (done) => {
+      Vote.create({
+        value: 1,
+        userId: this.user.id,
+        postId: this.post.id
+      })
+      .then((vote) => {
+        this.post.hasUpvotedFor(this.user.id, (res) => {
+          expect(res).toBeTruthy();
+          done();
+        });
       });
     });
   });
+
+  describe("#hasDownvotedFor()", () => {
+
+    it("should return true if the user has an upvote for the post", (done) => {
+      Vote.create({
+        value: -1,
+        userId: this.user.id,
+        postId: this.post.id
+      })
+      .then((vote) => {
+        this.post.hasDownvotedFor(this.user.id, (res) => {
+          expect(res).toBeTruthy();
+          done();
+        });
+      });
+    });
+  });
+  //
+  // describe("#hasUpvotedFor()", () => {
+  //
+  //   it("should return true if the user has an upvote for the post", (done) => {
+  //
+  //     Vote.create({
+  //       value: 1,
+  //       userId: this.user.id,
+  //       postId: this.post.id
+  //     })
+  //     .then((vote) => {
+  //       console.log(this.post.hasUpvotedFor(this.user));
+  //
+  //       expect(this.post.hasUpvotedFor(this.user)).toBe(true);
+  //       done();
+  //     })
+  //   })
+  // })
 });

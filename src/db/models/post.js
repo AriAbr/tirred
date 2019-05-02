@@ -39,11 +39,41 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   Post.prototype.getPoints = function(){
-    if(this.votes.length === 0) return 0;
+    if(!this.votes || this.votes.length === 0) return 0;
 
     return this.votes
       .map((v) => { return v.value })
       .reduce((prev, next) => { return prev + next });
   };
+
+  Post.prototype.hasUpvotedFor = function(userId, callback){
+    return this.getVotes({
+      where: {
+        userId: userId,
+        postId: this.id,
+        value: 1
+      }
+    })
+    .then((votes) => {
+      votes.length != 0 ? callback(true) : callback(false);
+    });
+  };
+
+  Post.prototype.hasDownvotedFor = function(userId, callback){
+    return this.getVotes({
+      where: {
+        userId: userId,
+        postId: this.id,
+        value: -1
+      }
+    })
+    .then((votes) => {
+      votes.length != 0 ? callback(true) : callback(false);
+    });
+  };
+  //
+  // Post.prototype.hasUpvotedFor = function (userId){
+  //   return `this.votes::::: ${this.votes}`
+  // };
   return Post;
 };
