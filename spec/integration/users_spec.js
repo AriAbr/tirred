@@ -5,6 +5,7 @@ const User = require("../../src/db/models").User;
 const Topic = require("../../src/db/models").Topic;
 const Post = require("../../src/db/models").Post;
 const Comment = require("../../src/db/models").Comment;
+const Favorite = require("../../src/db/models").Favorite;
 const sequelize = require("../../src/db/models/index").sequelize;
 
 describe("routes : users", () => {
@@ -102,6 +103,7 @@ describe("routes : users", () => {
       this.user;
       this.post;
       this.comment;
+      this.topic;
 
       User.create({
         email: "starman@tesla.com",
@@ -125,6 +127,7 @@ describe("routes : users", () => {
           }
         })
         .then((topic) => {
+          this.topic = topic;
           this.post = topic.posts[0]
 
           Comment.create({
@@ -147,6 +150,35 @@ describe("routes : users", () => {
         expect(body).toContain("Snowball Fighting");
         expect(body).toContain("This comment is alright.");
         done()
+      });
+    });
+
+    it("should present a list of posts a user has favorited", (done) => {
+
+      User.create({
+        email: "bob@example.com",
+        password: "password"
+      })
+      .then((newUser) => {
+        Post.create({
+          title: "Favorite Post",
+          body: "This post will be favorited",
+          userId: newUser.id,
+          topicId: this.topic.id
+        })
+        .then((favoritePost) => {
+          Favorite.create({
+            userId: this.user.id,
+            postId: favoritePost.id
+          })
+          .then((favorite) => {
+            request.get(`${base}${this.user.id}`, (err, res, body) => {
+
+              expect(body).toContain("Favorite Post");
+              done()
+            });
+          });
+        });
       });
     });
   });
