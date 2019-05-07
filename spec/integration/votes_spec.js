@@ -53,11 +53,11 @@ describe("routes : votes", () => {
 
   describe("guest attempting to vote on a post", () => {
 
-    beforeEach((done) => {
+    beforeEach((done) => {    // before each suite in this context
       request.get({
         url: "http://localhost:3000/auth/fake",
         form: {
-          userId: 0 // ensure no user signed in
+          userId: 0 // ensure no user in scope
         }
       },
         (err, res, body) => {
@@ -74,7 +74,7 @@ describe("routes : votes", () => {
         };
         request.get(options,
           (err, res, body) => {
-            Vote.findOne({
+            Vote.findOne({            // look for the vote, should not find one.
               where: {
                 userId: this.user.id,
                 postId: this.post.id

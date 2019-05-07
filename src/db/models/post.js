@@ -43,8 +43,8 @@ module.exports = (sequelize, DataTypes) => {
 
     Post.afterCreate((post, callback) => {
       return models.Favorite.create({
-        userId: post.userId,
-        postId: post.id
+        userId: parseInt(post.userId),
+        postId: parseInt(post.id)
       });
     });
 

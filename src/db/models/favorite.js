@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     postId: {
       type: DataTypes.INTEGER,
       allowNull: false
-    },
+    }
   }, {});
   Favorite.associate = function(models) {
     // associations can be defined here
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         where: { userId: userId},
         order: [["createdAt", "DESC"]]
       }
-    })
+    });
   };
   return Favorite;
 };

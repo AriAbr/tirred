@@ -26,9 +26,7 @@ module.exports = {
       };
       postQueries.addPost(newPost, (err, post) => {
         if(err){
-          console.log("LOGGING SERVER ERROR");
-          console.log(err);
-          res.redirect(500, `posts/new`);
+          res.redirect(500, `/topics/${newPost.topicId}/posts/new`);
         } else {
           res.redirect(303, `/topics/${newPost.topicId}/posts/${post.id}`);
         }
