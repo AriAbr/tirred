@@ -48,6 +48,7 @@ describe("User", () => {
     });
 
     it("should not create a user with an email already taken", (done) => {
+
       User.create({
         email: "user@example.com",
         password: "1234567890"
