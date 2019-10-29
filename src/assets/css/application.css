@@ -5,3 +5,7 @@ body {
 .btn {
   margin-bottom: 8px;
 }
+
+#about-paragraph{
+  font-size: 18px;
+}
